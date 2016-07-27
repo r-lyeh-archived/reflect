@@ -25,7 +25,6 @@
 
 #include <cstddef>
 #include <string>
-#include <dlfcn.h>
 
 #include "object.h"
 #include "method.h"

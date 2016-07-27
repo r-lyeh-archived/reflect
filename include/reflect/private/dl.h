@@ -23,7 +23,11 @@
 #ifndef REFLECT_DL
 #define REFLECT_DL
 
-#include <dlfcn.h>
+#ifdef _WIN32
+#   include "dlfcn.h"
+#else
+#   include <dlfcn.h>
+#endif
 
 namespace rf {
 

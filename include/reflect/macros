@@ -27,6 +27,7 @@
 
 #include <iostream>
 #include <functional>
+
 #include "private/macros.h"
 
 #define rtti_type(...) _rtti_type(narg(__VA_ARGS__), __VA_ARGS__)
@@ -34,11 +35,9 @@
 #define rtti_method(type, method, ...) _rtti_method(narg(__VA_ARGS__), type, method, __VA_ARGS__)
 
 #define rtti_field(type, field_type, field_name) \
-extern "C" { \
-    field_type &_field_reflectable_##field_name##_##type(void *instance) { \
+    REFLECT_EXTERNC(field_type &,_field_reflectable_##field_name##_##type)(void *instance) { \
         type *real_instance = static_cast<type*>(instance); \
         return real_instance->field_name; \
     } \
-} \
 
 #endif

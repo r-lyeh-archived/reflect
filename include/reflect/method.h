@@ -27,6 +27,13 @@
 #include "class.h"
 #include "object.h"
 #include "private/dl.h"
+#include "macros"
+
+#if _WIN32
+extern "C" {
+    typedef __declspec(dllexport) void *(*pfnt)(void*, void *);
+}
+#endif
 
 namespace rf {
 
@@ -55,9 +62,16 @@ public:
 
     template<typename R = void, class ...P>
     R invoke(object_t &o, P... params) {
+#if _WIN32
+        std::function<R(P...)> func;
+        pfnt pfn = (pfnt )( this->ptr );
+        (pfn)( o.get_ptr(), &func );
+        return func(params...);
+#else
         std::function<R(P...)> (*func)(void*) = (std::function<R(P...)> (*)(void*))this->ptr;
         auto fn = func(o.get_ptr());
         return fn(params...);
+#endif
     }
 
     std::string &name() {
